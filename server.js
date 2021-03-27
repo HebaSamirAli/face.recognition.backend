@@ -7,15 +7,30 @@ const { response } = require('express');
 
 //const { json } = require('body-parser');
 
-// db connection ................
-// process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0
+//db connection on heroku ................
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0
 const db = knex({
     client: 'pg',
     connection: {
        connectionString : process.env.DATABASE_URL,
-       ssl : true //{rejectUnauthorized : false}
+       ssl : true,
+       sslfactory = org.postgresql.ssl.NonValidatingFactory,
+       sslmode = require
+    //    rejectUnauthorized : false
     }
 });
+
+// db connection localy ................
+// const db = knex({
+//     client: 'pg',
+//     connection: {
+//        host : '127.0.0.1',
+//        user : 'postgres',
+//        password : 'bebo',
+//        database : 'facerecognition'
+//     },
+// });
+
 
 // Build App .......................................
 const app = express();
@@ -24,7 +39,7 @@ app.use(cors());
 
 // Root GET all Users data ........... all done ...... for check
 app.get('/', (req,res) => {
-    res.json('server is working !!!!!!!!!');
+    res.json('faceRecognition server is working !!!!!!!!!');
 })
 //.......................................
 
@@ -83,7 +98,7 @@ app.post('/register', (req,res) => {
                 .then(trx.commit)
                 .catch(trx.rollback)
     })
-    .catch(err => res.status(400).json('unable to register'))
+    .catch(err => res.status(400).json('unable to register or add to data'))
     }       
 })
 
